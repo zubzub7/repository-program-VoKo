@@ -1,6 +1,3 @@
-
-B
-.MODEL SMALL
 .CODE
 ORG 100H
    
@@ -9,11 +6,10 @@ AWAL:
     JMP PROSES
     KAL0 DB 'Ketikkan satu kalimat:$'
     KAL1 DB 13,10,'Kalimat yang diinput adalah:$'
-    KAL2 DB 13,10,'Cetak dari belakang:$',13,10  
-    KAL3 DB 13,10,'panjang string adalah:$' 
+    KAL2 DB 13,10,'panjang string adalah:$' 
     KALX DB 13,10,'$'
-    KAL4 DB 13,10,'Jumlah Huruf Vokal:$'  
-    KAL5 DB 13,10,'Jumlah Huruf Konsonan:$'
+    KAL3 DB 13,10,'Jumlah Huruf Vokal:$'  
+    KAL4 DB 13,10,'Jumlah Huruf Konsonan:$'
     KATA DB 20,?,20 DUP (?)                   
     
     
@@ -51,7 +47,7 @@ PROSES:
 CETAK:
     MOV DL,[BX]                    
     CMP DL,0DH                    
-    JE BELAKANG                    
+    JE  CETAK1                    
         
     MOV AH,02H
     INT 21H
@@ -78,16 +74,10 @@ CETAK:
         JE VOKAL 
         
 PLUS:INC BX
-     JMP CETAK    
-   
-    ;============= CETAK KATA DARI BELAKANG ==================
-
-BELAKANG:MOV AH,09H
-         MOV DX,OFFSET KAL2
-         INT 21H   
-         MOV AH,09H
-         MOV DX,OFFSET KALX            
-         INT 21H                     
+     JMP CETAK
+     
+     
+          
 
 CETAK1:    
     MOV DL,[BX]                    
@@ -105,7 +95,7 @@ CETAK1:
     
 VOKAL1:
     MOV AH,09H
-    MOV DX,OFFSET KAL4
+    MOV DX,OFFSET KAL3
     INT 21H
     
     MOV DL,CL
@@ -118,7 +108,7 @@ VOKAL1:
     
 KONSONAN:
     MOV AH,09H
-    MOV DX,OFFSET KAL5
+    MOV DX,OFFSET KAL4
     INT 21H
    
     MOV BX,OFFSET KATA+1        
@@ -129,14 +119,16 @@ KONSONAN:
     MOV AH,02H
     INT 21H  
     
-
+    
     ;============= CETAK PANJANG STRING ================
     
 AKHIR:
     MOV AH,09H
-    MOV DX,OFFSET KAL3
+    MOV DX,OFFSET KAL2
     INT 21H
-    
+    MOV AH,09H
+    MOV DX,OFFSET KALX            
+    INT 21H 
     MOV BX,OFFSET KATA+1
     MOV DL,[BX]
     ADD DL,30H
