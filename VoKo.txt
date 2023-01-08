@@ -139,3 +139,4 @@ SELESAI:
     INT 20H
     
 END AWAL
+
